@@ -13,15 +13,17 @@ def median(numbers):
 def mean(numbers):
     return np.mean(numbers)
 
+OPERATIONS = {
+    "median": median,
+    "mean": mean
+}
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("numbers", nargs="+", type=float, help="Numbers you want to operate over")
-    parser.add_argument("--operation", default="median", choices=["median", "mean"], type=str)
+    parser.add_argument("--operation", default="median", choices=["median", "mean"])
     args = parser.parse_args()
-    if (args.operation == median):
-        print(median(args.numbers))
-    elif (args.operation == mean):
-        print(mean(args.numbers))
+    print(OPERATIONS.get(args.operation)(args.numbers))
     
 if __name__ == "__main__":
     main()
