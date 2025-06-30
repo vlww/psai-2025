@@ -1,4 +1,4 @@
-import argparse
+import argparse #lets you put argument in command line
 
 def median(numbers):
     sorted_nums = sorted(numbers)
