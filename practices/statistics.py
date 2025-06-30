@@ -1,4 +1,4 @@
-import argparse #lets you put argument in command line
+import argparse
 import numpy as np
 
 def median(numbers):
