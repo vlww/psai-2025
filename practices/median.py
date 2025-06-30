@@ -11,6 +11,6 @@ def median(numbers):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("nums", nargs='+', type=float, help="List of numbers to compute the median of")
+    parser.add_argument("nums", nargs='+', type=float)
     args = parser.parse_args()
     print(median(args.nums))
