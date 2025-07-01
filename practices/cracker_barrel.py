@@ -1,6 +1,5 @@
 import argparse
 import time
-import climage
 
 def cracker_barrel(board, size, path=None):
     time.sleep(.05)
