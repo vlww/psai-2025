@@ -13,7 +13,7 @@ def cracker_barrel(board, size, path=None):
 
     if peg_count == 1:
         print("Solution found!")
-        time.sleep(3)
+        time.sleep(2)
         for step, state in enumerate(path):
             time.sleep(1)
             print(f"Step {step}:")
