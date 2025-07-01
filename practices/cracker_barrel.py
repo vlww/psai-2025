@@ -7,7 +7,7 @@ def cracker_barrel(board, size, path=None):
         path = [board]
 
     peg_count = count_pegs(board)
-    print(f"Recursion depth {len(path)}, Pegs left: {peg_count}")
+    print(f"Depth: {len(path)}, Pegs left: {peg_count}")
     print_state(board, size)
     print()
 
