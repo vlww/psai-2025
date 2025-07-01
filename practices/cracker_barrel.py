@@ -1,6 +1,7 @@
-def cracker_barrel():
-    positions = [0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,0,0,1]
-    print_state(positions, 6)
+import argparse
+
+def cracker_barrel(list, size):
+    print_state(list, size)
 
 def print_state(list, size):
     position = 0
@@ -15,7 +16,10 @@ def print_state(list, size):
         print()
 
 def main():
-    cracker_barrel()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('nums', nargs="+", type=int, help='The starting configuration, in 1s and 0s, separated by spaces')
+    args = parser.parse_args()
+    cracker_barrel(args.nums, 5)
 
 if __name__ == "__main__":
     main()
