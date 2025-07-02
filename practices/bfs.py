@@ -1,8 +1,9 @@
 import argparse
+import time
 
 def bfs(start, goal):
     adjacency_list = {}
-    filename = "ProblemSolvingWithAI/graphs/graph_100.txt"
+    filename = "ProblemSolvingWithAI/graphs/graph_1000.txt"
     try:
         with open(filename, 'r') as file:
             for line in file:
@@ -36,4 +37,8 @@ if __name__ == '__main__':
     parser.add_argument('start', type=str, help='Start node')
     parser.add_argument('goal', type=str, help='Start node')
     args = parser.parse_args()
+    start_time = time.perf_counter()
     print(bfs(args.start, args.goal))
+    end_time = time.perf_counter()
+    runtime = round((end_time-start_time)*1000)
+    print("Runtime:", (runtime), "ms")
