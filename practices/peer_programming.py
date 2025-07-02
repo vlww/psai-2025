@@ -17,7 +17,8 @@ def find_all_indices_from_file(filename, target):
     indices = [i for i, value in enumerate(listt) if value == target]
 
     if indices:
-        print("Matching indices:", indices)
+        for idx in indices:
+            print(idx)
     else:
         print(-1)
 
