@@ -22,7 +22,8 @@ def bfs(start, goal):
         #print(queue)
         current = queue.pop(0)
         visited_list.append(current)
-        #
+        if current == goal:
+            break
         for neighbor in adjacency_list.get(current, []):
             if neighbor not in visited:
                 visited.add(neighbor)
