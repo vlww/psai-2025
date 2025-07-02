@@ -2,7 +2,7 @@ import argparse
 
 def bfs(start, goal):
     adjacency_list = {}
-    filename = "practices/graph.txt"
+    filename = "ProblemSolvingWithAI/graphs/graph_100.txt"
     try:
         with open(filename, 'r') as file:
             for line in file:
