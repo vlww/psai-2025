@@ -20,17 +20,7 @@ def bfs(adjacency_list, start, goal):
 
     return visited
 
-def read_adjacency_list(filename):
-    adjacency_list = {}
-    with open(filename, 'r') as file:
-        for line in file:
-            parts = line.strip().split()
-            node = int(parts[0])
-            neighbors = list(map(int, parts[1:]))
-            adjacency_list[node] = neighbors
-    return adjacency_list
-
-def generate_random_graph(num_nodes, edge_prob, min_edges):
+def generate_random_graph(num_nodes, edge_prob, min_edges=1):
     graph = defaultdict(set)
 
     for node in range(num_nodes):
@@ -48,15 +38,22 @@ def generate_random_graph(num_nodes, edge_prob, min_edges):
 
     return {node: list(neighbors) for node, neighbors in graph.items()}
 
-def run_heatmap(node_range, prob_range, trials=5, min_edges=1):
-    heatmap = []
+def run_heatmap(max_nodes, max_prob, steps, trials, min_edges=1):
+    node_range = [int(max_nodes * (i / (steps - 1))) for i in range(steps)]
+    prob_range = [max_prob * (i / (steps - 1)) for i in range(steps)]
 
-    for num_nodes in node_range:
+    heatmap = []
+    total_cells = steps * steps
+    completed_cells = 0
+
+    for i, num_nodes in enumerate(node_range):
         row = []
-        for edge_prob in prob_range:
+        for j, edge_prob in enumerate(prob_range):
             total_time = 0
             for _ in range(trials):
                 graph = generate_random_graph(num_nodes, edge_prob, min_edges)
+                if num_nodes < 2:
+                    continue  # not enough nodes to sample start/goal
                 start, goal = random.sample(range(num_nodes), 2)
                 start_time = time.perf_counter()
                 bfs(graph, start, goal)
@@ -64,38 +61,37 @@ def run_heatmap(node_range, prob_range, trials=5, min_edges=1):
                 total_time += (end_time - start_time)
             avg_time_ms = (total_time / trials) * 1000
             row.append(avg_time_ms)
+
+            # Update and print progress
+            completed_cells += 1
+            progress_percent = (completed_cells / total_cells) * 100
+            print(f"Progress: {completed_cells}/{total_cells} ({progress_percent:.1f}%)", end='\r')
         heatmap.append(row)
 
-    # Plotting
+    print()  # move to next line after progress
     plt.figure(figsize=(10, 7))
     data = np.array(heatmap)
     im = plt.imshow(data, cmap='viridis', origin='lower', aspect='auto')
 
-    plt.xticks(ticks=range(len(prob_range)), labels=[f"{p:.2f}" for p in prob_range])
-    plt.yticks(ticks=range(len(node_range)), labels=node_range)
+    plt.xticks(ticks=range(steps), labels=[f"{p:.2f}" for p in prob_range])
+    plt.yticks(ticks=range(steps), labels=node_range)
     plt.xlabel("Edge Probability")
     plt.ylabel("Number of Nodes")
-    plt.title("Average BFS Runtime (ms)")
+    plt.title(f"Average BFS Runtime (ms) over {trials} Trials")
     plt.colorbar(im, label='Time (ms)')
     plt.tight_layout()
     plt.show()
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--start', type=int, help='Start node')
-    parser.add_argument('--goal', type=int, help='Goal node')
-    parser.add_argument('--file', type=str, default="graph.txt", help='Graph file (adjacency list)')
-    parser.add_argument('--heatmap', action='store_true', help='Generate heatmap of runtimes')
+
+def main():
+    parser = argparse.ArgumentParser(description="Generate a BFS heatmap over random graphs.")
+    parser.add_argument('-n', '--max_nodes', type=int, required=True, help="Maximum number of nodes")
+    parser.add_argument('-p', '--max_prob', type=float, required=True, help="Maximum edge probability (0.0 - 1.0)")
+    parser.add_argument('-s', '--steps', type=int, default=6, help="Number of intervals/steps per axis (default: 6)")
+    parser.add_argument('-t', '--trials', type=int, default=3, help="Trials per (nodes, prob) pair (default: 3)")
     args = parser.parse_args()
 
-    if args.heatmap:
-        node_range = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]       # y-axis
-        prob_range = [0.01, 0.05, 0.1, 0.2, 0.4, 0.6, 0.8]    # x-axis
-        run_heatmap(node_range, prob_range, trials=3)
-    else:
-        adj = read_adjacency_list(args.file)
-        start_time = time.perf_counter()
-        visited = bfs(adj, args.start, args.goal)
-        end_time = time.perf_counter()
-        print("Visited nodes:", visited)
-        print("Runtime:", round((end_time - start_time) * 1000), "ms")
+    run_heatmap(args.max_nodes, args.max_prob, args.steps, args.trials)
+
+if __name__ == "__main__":
+    main()
