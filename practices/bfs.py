@@ -1,3 +1,5 @@
+import argparse
+
 def bfs(start, goal):
     adjacency_list = {}
     filename = "practices/graph.txt"
@@ -17,6 +19,7 @@ def bfs(start, goal):
     visited_list = []
 
     while queue:
+        #print(queue)
         current = queue.pop(0)
         visited_list.append(current)
         if current == goal:
@@ -29,4 +32,8 @@ def bfs(start, goal):
     return visited_list
 
 if __name__ == '__main__':
-    print(bfs("A", "H"))
+    parser = argparse.ArgumentParser()
+    parser.add_argument('start', type=str, help='Start node')
+    parser.add_argument('goal', type=str, help='Start node')
+    args = parser.parse_args()
+    print(bfs(args.start, args.goal))
