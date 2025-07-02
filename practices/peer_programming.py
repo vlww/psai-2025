@@ -1,6 +1,6 @@
 import argparse
 
-def find_all_indices_from_file(filename, target):
+def findnumba(filename, target):
     try:
         with open(filename, 'r') as file:
             listt = [int(line.strip()) for line in file if line.strip() != '']
@@ -26,4 +26,4 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('target', type=str, help='Target number to find in list.txt')
     args = parser.parse_args()
-    find_all_indices_from_file('practices/list.txt', args.target)
+    findnumba('practices/list.txt', args.target)
