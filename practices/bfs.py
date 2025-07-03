@@ -29,6 +29,9 @@ def bfs(start, goal, file_path):
         print(f"Failed to read file '{file_path}': {e}")
         return []
 
+    # After building adjacency_list
+    for node in adjacency_list:
+        adjacency_list[node].sort()
 
 
     # BFS setup
