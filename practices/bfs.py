@@ -2,7 +2,7 @@ import argparse
 
 def bfs(start, goal):
     adjacency_list = {}
-    filename = "practices/graph.txt"
+    filename = "practices/graph2.txt"
     try:
         with open(filename, 'r') as file:
             for line in file:
@@ -16,20 +16,30 @@ def bfs(start, goal):
 
     queue = [start]
     visited = set([start])
-    visited_list = []
+    parent = {start: None}  # For reconstructing the path
 
     while queue:
-        #print(queue)
         current = queue.pop(0)
-        visited_list.append(current)
         if current == goal:
             break
         for neighbor in adjacency_list.get(current, []):
             if neighbor not in visited:
                 visited.add(neighbor)
+                parent[neighbor] = current  # Track how we got here
                 queue.append(neighbor)
 
-    return visited_list
+    # Reconstruct path from goal to start using parent dictionary
+    if goal not in parent:
+        return []  # No path found
+
+    path = []
+    node = goal
+    while node is not None:
+        path.append(node)
+        node = parent[node]
+    path.reverse()
+    return path
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
