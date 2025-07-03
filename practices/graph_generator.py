@@ -35,7 +35,7 @@ def main():
     parser.add_argument('-n', '--nodes', type=int, required=True, help="Number of nodes")
     parser.add_argument('-p', '--probability', type=float, default=0.1, help="Edge probability (0.0 - 1.0)")
     parser.add_argument('-m', '--min_edges', type=int, default=0, help="Minimum edges per node")
-    parser.add_argument('-o', '--output', type=str, default="graph.txt", help="Output filename")
+    parser.add_argument('-o', '--output', type=str, default="practices/generated_graph.txt", help="Output filename")
 
     args = parser.parse_args()
 
