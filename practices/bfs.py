@@ -1,8 +1,8 @@
 import argparse
 
-def bfs(start, goal):
+def bfs(start, goal, file):
     adjacency_list = {}
-    filename = "practices/graph2.txt"
+    filename = file
     try:
         with open(filename, 'r') as file:
             for line in file:
@@ -45,5 +45,6 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('start', type=str, help='Start node')
     parser.add_argument('goal', type=str, help='Goal node')
+    parser.add_argument('file', type=str, help='File with adjacency matrix')
     args = parser.parse_args()
-    print(bfs(args.start, args.goal))
+    print(bfs(args.start, args.goal, args.file))
