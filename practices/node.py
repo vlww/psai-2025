@@ -11,11 +11,13 @@ def main():
     D = Node("D", C, 3)
     path(D)
 
-def path(Node):
-    while Node.parent is not None:
-        print(Node.name, "→ ", end="")
-        Node = Node.parent
-    print(Node.name)
+def path(node):
+    nodes = []
+    while node is not None:
+        nodes.append(node.name)
+        node = node.parent
+    nodes.reverse()
+    print(" → ".join(nodes))
 
 if __name__ == "__main__":
     main()
