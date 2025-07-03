@@ -2,7 +2,7 @@ import argparse
 
 def dfs(start, goal):
     adjacency_list = {}
-    filename = "practices/graph.txt"
+    filename = "practices/graph2.txt"
     try:
         with open(filename, 'r') as file:
             for line in file:
@@ -19,7 +19,7 @@ def dfs(start, goal):
     visited_list = []
 
     while queue:
-        print(queue)
+        #print(queue)
         current = queue.pop(0)
         visited_list.append(current)
         if current == goal:
