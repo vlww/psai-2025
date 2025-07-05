@@ -2,7 +2,7 @@ import argparse
 import time
 
 def cracker_barrel(board, size, path=None):
-    time.sleep(.05)
+    time.sleep(.02)
     if path is None:
         path = [board]
 
