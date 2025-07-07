@@ -44,4 +44,9 @@ class TicTacToeProblem:
         return False, None
     
     def utility(self, state):
-        pass
+        terminal, winner = self.is_terminal(state)
+        if not terminal:
+            return 0
+        if winner == 1:
+            return 10
+        return -10
