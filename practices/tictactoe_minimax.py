@@ -50,7 +50,7 @@ def check_winner(values):
     return 0  # Game not over
 
 
-def minimax(values, current_player, maximizing_player=None):
+def minimax(values, current_player, depth, maximizing_player=None):
     if maximizing_player is None:
         maximizing_player = current_player
 
@@ -68,7 +68,7 @@ def minimax(values, current_player, maximizing_player=None):
     for i in range(9):
         if values[i] == 0:
             values[i] = current_player
-            score, _ = minimax(values, 2 if current_player == 1 else 1, maximizing_player)
+            score, _ = minimax(values, 2 if current_player == 1 else 1, depth-1, maximizing_player)
             values[i] = 0
             if current_player == maximizing_player:
                 if score > best_score:
@@ -83,7 +83,7 @@ def minimax(values, current_player, maximizing_player=None):
 
 
 def ai_move(values, player):
-    score, move = minimax(values, player)
+    score, move = minimax(values, player, depth=0)
     print(f"\n{'X' if player == 1 else 'O'} chooses: {moves[move]}")
     print(f"Utility: {score}")
     values[move] = player
