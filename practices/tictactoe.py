@@ -6,6 +6,17 @@ def main():
         values = make_move(values, num_turns)
         num_turns += 1
         print_board(values)
+        state = check_winner(values)
+        if state == 3:
+            print("\nNo one wins!")
+            break
+        if state == 1:
+            print()
+            print("\nX wins!")
+            break
+        if state == 2:
+            print("\nO wins!")
+            break
 
 def create_board():
     values = [0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -54,6 +65,44 @@ def make_move(values, turns):
             print("Invalid move name. Try again (e.g., 'top left').")
 
 
+def check_winner(values):
+    full = True
+    for i in values:
+        if i == 0:
+            full = False
+    if full:
+        return 3
+    
+    if values[0] == values[1] == values[2] != 0:
+        return values[0]
+    if values[3] == values[4] == values[5] != 0:
+        return values[3]
+    if values[6] == values[7] == values[8] != 0:
+        return values[6]
+    if values[0] == values[3] == values[6] != 0:
+        return values[0]
+    if values[1] == values[4] == values[7] != 0:
+        return values[1]
+    if values[2] == values[5] == values[8] != 0:
+        return values[2]
+    if values[0] == values[4] == values[8] != 0:
+        return values[0]
+    if values[2] == values[4] == values[6] != 0:
+        return values[2]
+    if values[0] == 1 and values[1] == 1 and values[2] == 1:
+        return 1
+    if values[0] == 2 and values[1] == 2 and values[2] == 2:
+        return 2
+    if values[3] == 1 and values[4] == 1 and values[5] == 1:
+        return 1
+    if values[3] == 2 and values[4] == 2 and values[5] == 2:
+        return 2
+    if values[6] == 1 and values[7] == 1 and values[8] == 1:
+        return 1
+    if values[6] == 2 and values[7] == 2 and values[8] == 2:
+        return 2
+
+    return 0
 
 
 
