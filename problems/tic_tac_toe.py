@@ -24,19 +24,24 @@ class TicTacToeProblem:
 
     def is_terminal(self, state):
         for i in range(3):
-        #check each row
-            if all(state[i,:]==1) or all(state[i,:]==2):
-                return True
-        #check each column
-            if all(state[:,i]==1) or all(state[:,i]==2):
-                return True
-        #diagonals
+            for j in range(1,3):
+            #check each row
+                if all(state[i,:]==j):
+                    return True, j
+            #check each column
+                if all(state[:,i]==j):
+                    return True, j   
         flipped_diagonal = np.diag(np.fliplr(state))
-        if all(state.diagonal() == 1) or all(state.diagonal() == 2):
-            return True
-        if all(flipped_diagonal == 1) or all(flipped_diagonal == 2):
-            return True
+        for j in range(1,3):
+            #diagonals
+            if all(state.diagonal() == j):
+                return True, j
+            if all(flipped_diagonal == j):
+                return True, j
         #check for draw
         if not any(state==0):
-            return True
-        return False
+            return True, 0
+        return False, None
+    
+    def utility(self, state):
+        pass
