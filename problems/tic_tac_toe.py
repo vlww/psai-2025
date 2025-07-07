@@ -13,13 +13,12 @@ class TicTacToeProblem:
 
 
     def get_successors(self, state, player):
-        states, actions = [], []
-        for move in self.get_moves(state,player):
+        successors = []
+        for move in self.get_moves(state, player):
             new_state = state.copy()
             new_state[move[0], move[1]] = player
-            states.append(new_state)
-            actions.append(move)
-        return states, actions
+            successors.append(move, new_state)
+        return successors
     
 
     def is_terminal(self, state):
