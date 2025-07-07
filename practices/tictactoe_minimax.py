@@ -46,8 +46,8 @@ def check_winner(values):
         if values[i] == values[j] == values[k] != 0:
             return values[i]
     if all(v != 0 for v in values):
-        return 3  # Tie
-    return 0  # Game not over
+        return 3 
+    return 0 
 
 
 def minimax(values, current_player, depth, maximizing_player=None):
