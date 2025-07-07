@@ -8,7 +8,7 @@ def main():
         print_board(values)
         state = check_winner(values)
         if state == 3:
-            print("\nNo one wins!")
+            print("\nIt's a tie!")
             break
         if state == 1:
             print()
@@ -23,6 +23,7 @@ def create_board():
     return values
 
 def print_board(values):
+    print()
     for row in range(3):
         row_str = " "
         for col in range(3):
@@ -45,11 +46,28 @@ valid_moves = {
     "bottom left": 6, "bottom middle": 7, "bottom right": 8
 }
 
+moves = {
+    0: "top left", 1: "top middle", 2: "top right",
+    3: "middle left", 4: "center", 5: "middle right",
+    6: "bottom left", 7: "bottom middle", 8: "bottom right"
+}
+
 def normalize_move(user_input):
     return ' '.join(user_input.lower().strip().split())
 
 def make_move(values, turns):
     while True:
+        for i in range(9):
+            if(values[i]==0):
+                last = i
+        print("\nValid moves: ", end="")
+        for i in range(9):
+            if (values[i]==0):
+                if(i==last):
+                    print(moves[i])
+                else:
+                    print(moves[i], end="")
+                    print(", ", end="")
         user_input = input("Choose the position where you want to move: ")
         move = normalize_move(user_input)
 
@@ -62,7 +80,7 @@ def make_move(values, turns):
                 values[index] = player
                 return values 
         else:
-            print("Invalid move name. Try again (e.g., 'top left').")
+            print("Invalid move name, try again.")
 
 
 def check_winner(values):
