@@ -1,9 +1,12 @@
+import time
+
 def main():
     values = create_board()
     print_board(values)
     num_turns = 0
     while True:
         values = make_move(values, num_turns)
+        time.sleep(1)
         num_turns += 1
         print_board(values)
         state = check_winner(values)
@@ -11,12 +14,12 @@ def main():
             print("\nIt's a tie!")
             break
         if state == 1:
-            print()
             print("\nX wins!")
             break
         if state == 2:
             print("\nO wins!")
             break
+
 
 def create_board():
     values = [0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -56,71 +59,67 @@ def normalize_move(user_input):
     return ' '.join(user_input.lower().strip().split())
 
 def make_move(values, turns):
-    while True:
-        for i in range(9):
-            if(values[i]==0):
-                last = i
-        print("\nValid moves: ", end="")
-        for i in range(9):
-            if (values[i]==0):
-                if(i==last):
-                    print(moves[i])
-                else:
-                    print(moves[i], end="")
-                    print(", ", end="")
-        user_input = input("Choose the position where you want to move: ")
-        move = normalize_move(user_input)
+    player = 1 if turns % 2 == 0 else 2  # X or O
+    score, best_move = minimax(values, player)
 
-        if move in valid_moves:
-            index = valid_moves[move]
-            if values[index] != 0:
-                print("That space is already taken. Try again.")
-            else:
-                player = 1 if turns % 2 == 0 else 2
-                values[index] = player
-                return values 
-        else:
-            print("Invalid move name, try again.")
+    move_name = moves[best_move]
+    print(f"\nPlayer {'X' if player == 1 else 'O'} chooses: {move_name}")
+
+    values[best_move] = player
+    return values
+
 
 
 def check_winner(values):
-    full = True
-    for i in values:
-        if i == 0:
-            full = False
-    if full:
-        return 3
-    
-    if values[0] == values[1] == values[2] != 0:
-        return values[0]
-    if values[3] == values[4] == values[5] != 0:
-        return values[3]
-    if values[6] == values[7] == values[8] != 0:
-        return values[6]
-    if values[0] == values[3] == values[6] != 0:
-        return values[0]
-    if values[1] == values[4] == values[7] != 0:
-        return values[1]
-    if values[2] == values[5] == values[8] != 0:
-        return values[2]
-    if values[0] == values[4] == values[8] != 0:
-        return values[0]
-    if values[2] == values[4] == values[6] != 0:
-        return values[2]
-    if values[0] == 1 and values[1] == 1 and values[2] == 1:
-        return 1
-    if values[0] == 2 and values[1] == 2 and values[2] == 2:
-        return 2
-    if values[3] == 1 and values[4] == 1 and values[5] == 1:
-        return 1
-    if values[3] == 2 and values[4] == 2 and values[5] == 2:
-        return 2
-    if values[6] == 1 and values[7] == 1 and values[8] == 1:
-        return 1
-    if values[6] == 2 and values[7] == 2 and values[8] == 2:
-        return 2
+    # All possible winning combinations
+    winning_combinations = [
+        (0, 1, 2), (3, 4, 5), (6, 7, 8),  # rows
+        (0, 3, 6), (1, 4, 7), (2, 5, 8),  # columns
+        (0, 4, 8), (2, 4, 6)              # diagonals
+    ]
 
-    return 0
+    for (i, j, k) in winning_combinations:
+        if values[i] == values[j] == values[k] != 0:
+            return values[i]  # 1 (X) or 2 (O)
+
+    if all(v != 0 for v in values):
+        return 3  # tie
+
+    return 0  # game not over
+
+
+def minimax(values, current_player, maximizing_player=None):
+    if maximizing_player is None:
+        maximizing_player = current_player
+
+    winner = check_winner(values)
+    if winner == maximizing_player:
+        return (1, None)
+    elif winner != 0 and winner != 3:
+        return (-1, None)
+    elif winner == 3:  # tie
+        return (0, None)
+
+    best_score = float('-inf') if current_player == maximizing_player else float('inf')
+    best_move = None
+
+    for i in range(9):
+        if values[i] == 0:
+            values[i] = current_player
+            score, _ = minimax(values, 2 if current_player == 1 else 1, maximizing_player)
+            values[i] = 0  # undo move
+
+            if current_player == maximizing_player:
+                if score > best_score:
+                    best_score = score
+                    best_move = i
+            else:
+                if score < best_score:
+                    best_score = score
+                    best_move = i
+
+    return best_score, best_move
+
 
 
 
