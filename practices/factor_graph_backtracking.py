@@ -76,8 +76,8 @@ def main():
 
     if solution:
         for i in range(len(nodes)):
-            print(f"{nodes[i].name}:{nodes[i].color} ", end="\t" if i != len(nodes) - 1 else "\n")
-        print("Steps taken (consistency checks):", steps)
+            print(f"{nodes[i].name}:{nodes[i].color} ", end="  \t" if i != len(nodes) - 1 else "\n")
+        print("Steps taken for first solution to be found:", steps)
     else:
         print("No valid coloring found.")
 
