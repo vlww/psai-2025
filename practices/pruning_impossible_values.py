@@ -43,4 +43,4 @@ if __name__ == "__main__":
     bag1 = [1, 2, 3, 4, 5]
     bag2 = [1, 2]
     constraint = 4
-    print(main(bag1, bag2, constraint, ">"))
+    print(main(bag1, bag2, constraint, "="))
