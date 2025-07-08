@@ -1,5 +1,3 @@
-from itertools import product
-
 class Node:
     def __init__(self, name, color, connections=None):
         self.name = name
@@ -37,47 +35,62 @@ def factors(node1, node2):
         return 1
 
 def brute_force(nodes, colors):
-    num = [0]*len(nodes)
     steps = 0
-    min_steps = 0
-    first = False
-    def inc():
-        num[0] += 1
-        for i in range(len(num)-1):
-            if num[i] > 2:
-                num[i] = 0
-                num[i+1] += 1
+    min_steps = None
+    first_solution_found = False
 
-    while(num[-1] <= 2):
-        for i in range(len(nodes)):
-            nodes[i].color = colors[num[i]]
+    for node in nodes:
+        node.color = colors[0]
+
+    while True:
         steps += 1
-        if check(nodes):
-            if not first:
+        valid, conflict_edges = check(nodes)
+
+        if valid:
+            if not first_solution_found:
                 min_steps = steps
-            first = True
-            for node in range(len(nodes)):
-                print(nodes[node].name + ":", nodes[node].color +  ("  \t" if node != len(nodes)-1 else "\n"),  end="")
-        inc()
-    print("Steps taken for first solution to be found:", min_steps)
-    print("Steps taken for all solutions to be found:", steps)
-    
+                first_solution_found = True
+                for node in range(len(nodes)):
+                    print(f"{nodes[node].name}:{nodes[node].color} ", end="  \t" if node != len(nodes)-1 else "\n")
+            break
+
+        conflict_count = {node: 0 for node in nodes}
+        for n1, n2 in conflict_edges:
+            conflict_count[n1] += 1
+            conflict_count[n2] += 1
+
+        most_conflicted = max(conflict_count.items(), key=lambda x: x[1])[0]
+
+        best_color = most_conflicted.color
+        min_conflicts = len(conflict_edges)
+
+        for color in colors:
+            if color == most_conflicted.color:
+                continue
+            most_conflicted.color = color
+            works, new_conflicts = check(nodes)
+            if len(new_conflicts) < min_conflicts:
+                best_color = color
+                min_conflicts = len(new_conflicts)
+            most_conflicted.color = best_color
+        most_conflicted.color = best_color
+
+    print("Steps taken for first solution to be found:", min_steps)    
     
 def check(nodes):
     seen_edges = set()
-    weights = []
+    conflict_edges = []
     for i in nodes:
         for j in i.connections:
             edge = tuple(sorted([i.name, j.name]))
             if edge not in seen_edges:
                 seen_edges.add(edge)
-                weights.append(factors(i, j))
-    product = 1
-    for w in weights:
-        product *= w
-    if product == 1:
-        return True
-    return False
+                if factors(i, j) == 0:
+                    conflict_edges.append((i, j))
+    if not conflict_edges:
+        return True, []
+    return False, conflict_edges
+
 
 if __name__ == "__main__":
     main()

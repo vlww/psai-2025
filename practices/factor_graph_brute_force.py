@@ -1,5 +1,3 @@
-from itertools import product
-
 class Node:
     def __init__(self, name, color, connections=None):
         self.name = name
