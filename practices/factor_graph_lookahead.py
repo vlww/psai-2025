@@ -38,7 +38,7 @@ def forward_check(var, value, domains, assignment):
                 removed[neighbor.name] = []
             removed[neighbor.name].append(value)
             if len(neighbor_domain) == 0:
-                return None  # Early failure
+                return None 
     return removed
 
 
