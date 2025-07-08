@@ -38,6 +38,9 @@ def factors(node1, node2):
 
 def brute_force(nodes, colors):
     num = [0]*len(nodes)
+    steps = 0
+    min_steps = 0
+    first = False
     def inc():
         num[0] += 1
         for i in range(len(num)-1):
@@ -48,10 +51,16 @@ def brute_force(nodes, colors):
     while(num[-1] <= 2):
         for i in range(len(nodes)):
             nodes[i].color = colors[num[i]]
+        steps += 1
         if check(nodes):
+            if not first:
+                min_steps = steps
+            first = True
             for node in range(len(nodes)):
                 print(nodes[node].name + ":", nodes[node].color +  ("  \t" if node != len(nodes)-1 else "\n"),  end="")
         inc()
+    print("Steps taken for first solution to be found:", min_steps)
+    print("Steps taken for all solutions to be found:", steps)
     
     
 def check(nodes):
