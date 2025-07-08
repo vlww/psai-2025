@@ -1,2 +1,2 @@
 # psai-2025
-Dartmouth summer course material
+Problem Solving with AI
