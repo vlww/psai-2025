@@ -25,7 +25,8 @@ def main():
 
     X = [WA, NT, SA, QLD, NSW, V, T]
     colors = ["red", "green", "blue"]
-
+    
+    print()
     brute_force(X, colors)
 
 
@@ -49,7 +50,7 @@ def brute_force(nodes, colors):
             nodes[i].color = colors[num[i]]
         if check(nodes):
             for node in range(len(nodes)):
-                print(nodes[node].name + ":", nodes[node].color +  (", " if node != len(nodes)-1 else "\n"),  end="")
+                print(nodes[node].name + ":", nodes[node].color +  ("  \t" if node != len(nodes)-1 else "\n"),  end="")
         inc()
     
     
