@@ -44,7 +44,7 @@ def brute_force(nodes, colors):
 
     while True:
         steps += 1
-        valid, conflict_edges = check(nodes)
+        valid, wrongs = check(nodes)
 
         if valid:
             if not first_solution_found:
@@ -55,41 +55,41 @@ def brute_force(nodes, colors):
             break
 
         conflict_count = {node: 0 for node in nodes}
-        for n1, n2 in conflict_edges:
+        for n1, n2 in wrongs:
             conflict_count[n1] += 1
             conflict_count[n2] += 1
 
-        most_conflicted = max(conflict_count.items(), key=lambda x: x[1])[0]
+        worst = max(conflict_count.items(), key=lambda x: x[1])[0]
 
-        best_color = most_conflicted.color
-        min_conflicts = len(conflict_edges)
+        best_color = worst.color
+        min_conflicts = len(wrongs)
 
         for color in colors:
-            if color == most_conflicted.color:
+            if color == worst.color:
                 continue
-            most_conflicted.color = color
+            worst.color = color
             works, new_conflicts = check(nodes)
             if len(new_conflicts) < min_conflicts:
                 best_color = color
                 min_conflicts = len(new_conflicts)
-            most_conflicted.color = best_color
-        most_conflicted.color = best_color
+            worst.color = best_color
+        worst.color = best_color
 
     print("Steps taken for first solution to be found:", min_steps)    
     
 def check(nodes):
     seen_edges = set()
-    conflict_edges = []
+    wrongs = []
     for i in nodes:
         for j in i.connections:
             edge = tuple(sorted([i.name, j.name]))
             if edge not in seen_edges:
                 seen_edges.add(edge)
                 if factors(i, j) == 0:
-                    conflict_edges.append((i, j))
-    if not conflict_edges:
+                    wrongs.append((i, j))
+    if not wrongs:
         return True, []
-    return False, conflict_edges
+    return False, wrongs
 
 
 if __name__ == "__main__":
