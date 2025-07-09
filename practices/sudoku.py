@@ -149,7 +149,7 @@ def backtrack(board, domains):
 
         result = AC3(domains)
         if result != False:
-            # time.sleep(.01)
+            # time.sleep(.1)
             print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
             print_state(board)
 
