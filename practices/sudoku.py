@@ -56,7 +56,7 @@ def print_state(board):
             if cell.number == 0:
                 print("\033[90m_ \033[0m", end="")
             elif cell.fixed:
-                print(f"\033[94m{cell.number} \033[0m", end="")  # blue
+                print(f"\033[1m{cell.number} \033[0m", end="")  # blue
             else:
                 print(cell.number, "", end="")  # white
         print()
