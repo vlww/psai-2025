@@ -1,4 +1,5 @@
 from collections import deque
+import argparse
 import copy
 import time
 
@@ -150,4 +151,7 @@ def backtrack(board, domains):
     return False
 
 if __name__ == '__main__':
-    main('practices/hard_sudoku.txt')
+    parser = argparse.ArgumentParser()
+    parser.add_argument('file', type=str, help='Path to file')
+    args = parser.parse_args()
+    main(args.file)
