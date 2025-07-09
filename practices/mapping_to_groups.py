@@ -1,4 +1,5 @@
 import argparse
+import math
 
 class Student:
     def __init__(self, role):
@@ -25,17 +26,25 @@ def backtrack(students, K, groups=None, index=0):
     if groups is None:
         groups = [[] for _ in range(K)]
 
+    max_group_size = math.ceil(len(students) / K)
+
+
     if index == len(students):
         if check(groups):
             return groups  
         return None
 
-    for i in range(K):
+    group_indices = sorted(range(K), key=lambda i: len(groups[i]))
+
+    for i in group_indices:
+        if len(groups[i]) >= max_group_size:
+            continue
+
         groups[i].append(students[index])
         result = backtrack(students, K, groups, index + 1)
         if result:
             return result
-        groups[i].pop()
+        groups[i].pop()  # backtrack
 
     return None
 
