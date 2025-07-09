@@ -49,12 +49,12 @@ def value_iteration(matrix):
                     expected_value = 0
                     for possible_action in ACTIONS:
                         prob = 0.8 if possible_action == action else 0.2 / 3
-                        ni, nj = get_next_state_coords(i, j, possible_action, rows, cols)
-                        reward = matrix[ni][nj]
-                        if matrix[ni][nj] in [100, -100]:
-                            expected_value += prob * matrix[ni][nj]  # Just the immediate reward
+                        n1, n2 = get_next_state_coords(i, j, possible_action, rows, cols)
+                        reward = matrix[n1][n2]
+                        if matrix[n1][n2] in [100, -100]:
+                            expected_value += prob * matrix[n1][n2]  
                         else:
-                            expected_value += prob * (matrix[ni][nj] + GAMMA * states[ni][nj].value)
+                            expected_value += prob * (matrix[n1][n2] + GAMMA * states[n1][n2].value)
 
 
                     best_value = max(best_value, expected_value)
@@ -68,6 +68,7 @@ def value_iteration(matrix):
                 states[i][j].value = new_values[i][j]
 
         print(f"\nIteration {iteration}:")
+        time.sleep(.5)
         for row in states:
             print(['{0:6.2f}'.format(s.value) for s in row])
 
