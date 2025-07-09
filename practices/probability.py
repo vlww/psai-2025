@@ -13,25 +13,36 @@ def cursed_die():
     expected = sum(p * o for p, o in zip(probs, outcomes))
     return expected
 
+def random_walk():
+    position = 0
+    for _ in range(100):
+        if random.random() > 0.5:
+            position += 1
+        else:
+            position -= 1
+    return position
+
 def random_walker(trials):
-    positions = []
+    total = 0
     for i in range(trials):
-        position = 0
-        for j in range(1000):
-            if random.random() > 0.5:
-                position += 1
-            else:
-                position -= 1
-        positions.append(position)
-    return positions
+        total += random_walk()
+    return total / trials
 
-if __name__ == '__main__':
-    trials = 1000
-    positions = random_walker(trials)
+def main():
+    outer_runs = 1000
+    inner_trials = 1000
 
-    plt.hist(positions, bins=30, edgecolor='black')
-    plt.title(f'plot')
+    average_positions = []
+    for i in range(outer_runs):
+        avg = random_walker(inner_trials)
+        average_positions.append(avg)
+
+    plt.hist(average_positions, bins=30, edgecolor='black')
+    plt.title('plot')
     plt.xlabel('position')
     plt.ylabel('freq')
     plt.grid(True)
     plt.show()
+
+if __name__ == '__main__':
+    main()
