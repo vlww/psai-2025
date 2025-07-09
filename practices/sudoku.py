@@ -102,44 +102,39 @@ def enforce_arc_consistency(domains, x1, x2):
 
 def AC3(domains):
     queue = deque()
-    for xi in domains:
-        for xj in get_neighbors(xi):
-            queue.append((xi, xj))
+    for x1 in domains:
+        for x2 in get_neighbors(x1):
+            queue.append((x1, x2))
 
     while queue:
-        xi, xj = queue.popleft()
-        if enforce_arc_consistency(domains, xi, xj):
-            if len(domains[xi]) == 0:
-                return False  # failure
-            for xk in get_neighbors(xi):
-                if xk != xj:
-                    queue.append((xk, xi))
+        x1, x2 = queue.popleft()
+        if enforce_arc_consistency(domains, x1, x2):
+            if len(domains[x1]) == 0:
+                return False 
+            for xk in get_neighbors(x1):
+                if xk != x2:
+                    queue.append((xk, x1))
     return domains
 
 def find_unassigned_cell(domains, board):
-    # MRV heuristic: cell with smallest domain > 1
     unassigned = [(pos, d) for pos, d in domains.items() if board[pos[0]][pos[1]].number == 0]
     if not unassigned:
         return None
-    # Sort by domain size
     unassigned.sort(key=lambda x: len(x[1]))
     return unassigned[0][0]
 
 def backtrack(board, domains):
     cell = find_unassigned_cell(domains, board)
     if cell is None:
-        return True  # Solved
+        return True 
 
     row, col = cell
     for val in sorted(domains[cell]):
-        # Make a copy of domains to restore later if needed
         domains_copy = copy.deepcopy(domains)
 
-        # Assign value
         board[row][col].number = val
         domains[cell] = {val}
 
-        # Run AC3 to propagate constraints
         result = AC3(domains)
         if result != False:
             time.sleep(.2)
@@ -149,7 +144,6 @@ def backtrack(board, domains):
             if backtrack(board, domains):
                 return True
 
-        # Backtrack
         board[row][col].number = 0
         domains = domains_copy
 
