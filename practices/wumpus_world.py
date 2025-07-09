@@ -1,5 +1,6 @@
 import copy
 import random
+import time
 
 ACTIONS = ['up', 'down', 'left', 'right']
 GAMMA = 0.8
@@ -24,6 +25,12 @@ def get_next_state_coords(i, j, action, rows, cols):
 def value_iteration(matrix):
     rows, cols = len(matrix), len(matrix[0])
     states = [[State(matrix[i][j]) for j in range(cols)] for i in range(rows)]
+
+    for i in range(rows):
+        for j in range(cols):
+            if matrix[i][j] in [100, -100]:
+                states[i][j].value = matrix[i][j]
+
     iteration = 0
 
     while True:
@@ -33,7 +40,7 @@ def value_iteration(matrix):
 
         for i in range(rows):
             for j in range(cols):
-                if matrix[i][j] in [100, -100]:  # Terminal states
+                if matrix[i][j] in [100, -100]: 
                     continue
 
                 best_value = float('-inf')
@@ -44,7 +51,11 @@ def value_iteration(matrix):
                         prob = 0.8 if possible_action == action else 0.2 / 3
                         ni, nj = get_next_state_coords(i, j, possible_action, rows, cols)
                         reward = matrix[ni][nj]
-                        expected_value += prob * (reward + GAMMA * states[ni][nj].value)
+                        if matrix[ni][nj] in [100, -100]:
+                            expected_value += prob * matrix[ni][nj]  # Just the immediate reward
+                        else:
+                            expected_value += prob * (matrix[ni][nj] + GAMMA * states[ni][nj].value)
+
 
                     best_value = max(best_value, expected_value)
 
