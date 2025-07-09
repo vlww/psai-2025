@@ -38,7 +38,6 @@ def main(filename):
             solved = backtrack(board, domains)
 
             if solved:
-                print_state(board)
                 print("\ngg ez")
             else:
                 print("im ahh")
@@ -90,15 +89,14 @@ def init_domains(board):
                 domains[(r, c)] = possible
     return domains
 
-def enforce_arc_consistency(domains, xi, xj):
+def enforce_arc_consistency(domains, x1, x2):
     revised = False
     to_remove = set()
-    for x in domains[xi]:
-        # If no y in xj's domain differs from x, remove x from xi
-        if all(x == y for y in domains[xj]):
+    for x in domains[x1]:
+        if all(x == y for y in domains[x2]):
             to_remove.add(x)
     if to_remove:
-        domains[xi] -= to_remove
+        domains[x1] -= to_remove
         revised = True
     return revised
 
