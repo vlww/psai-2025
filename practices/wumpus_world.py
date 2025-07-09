@@ -3,7 +3,7 @@ import random
 import time
 
 ACTIONS = ['up', 'down', 'left', 'right']
-GAMMA = 0.8
+GAMMA = 0.9
 THRESHOLD = 1e-3 
 
 class State:
