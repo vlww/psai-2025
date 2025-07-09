@@ -137,7 +137,7 @@ def backtrack(board, domains):
 
         result = AC3(domains)
         if result != False:
-            time.sleep(.2)
+            # time.sleep(.05)
             print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
             print_state(board)
 
@@ -150,4 +150,4 @@ def backtrack(board, domains):
     return False
 
 if __name__ == '__main__':
-    main('practices/sudoku.txt')
+    main('practices/hard_sudoku.txt')
