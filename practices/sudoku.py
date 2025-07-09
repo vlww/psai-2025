@@ -54,11 +54,11 @@ def print_state(board):
     for row in board:
         for cell in row:
             if cell.number == 0:
-                print("\033[90m_ \033[0m", end="")  # gray for empty
+                print("\033[90m_ \033[0m", end="")
             elif cell.fixed:
-                print(f"\033[94m{cell.number} \033[0m", end="")  # blue for original
+                print(f"\033[94m{cell.number} \033[0m", end="")  # blue
             else:
-                print(f"\033[96m{cell.number} \033[0m", end="")  # cyan for assigned
+                print(cell.number, "", end="")  # white
         print()
     print()
 
