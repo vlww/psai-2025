@@ -67,8 +67,8 @@ def value_iteration(matrix):
             for j in range(cols):
                 states[i][j].value = new_values[i][j]
 
-        print(f"\nIteration {iteration}:")
         time.sleep(.5)
+        print(f"\nIteration {iteration}:")
         for row in states:
             print(['{0:6.2f}'.format(s.value) for s in row])
 
