@@ -4,11 +4,13 @@ import copy
 import time
 
 class Node:
-    def __init__(self, number):
+    def __init__(self, number, fixed=False):
         self.number = number
+        self.fixed = fixed 
 
     def __repr__(self):
         return str(self.number) if self.number != 0 else '_'
+
 
 def main(filename):
     try:
@@ -22,7 +24,8 @@ def main(filename):
                     if char == '_':
                         row.append(Node(0))
                     elif char.isdigit():
-                        row.append(Node(int(char)))
+                        row.append(Node(int(char), fixed=True))
+
                     else:
                         raise ValueError(f"Invalid character '{char}' in line: {line}")
                 if len(row) != 9:
@@ -48,9 +51,17 @@ def main(filename):
         return
 
 def print_state(board):
-    for r in board:
-        print(" ".join(str(c) for c in r))
+    for row in board:
+        for cell in row:
+            if cell.number == 0:
+                print("\033[90m_ \033[0m", end="")  # gray for empty
+            elif cell.fixed:
+                print(f"\033[94m{cell.number} \033[0m", end="")  # blue for original
+            else:
+                print(f"\033[96m{cell.number} \033[0m", end="")  # cyan for assigned
+        print()
     print()
+
 
 def get_neighbors(pos):
     row, col = pos
