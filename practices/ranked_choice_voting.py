@@ -57,7 +57,11 @@ def main(filename):
             lowest_candidates = [c for c in stillin if tally[c] == min_votes]
 
             if len(lowest_candidates) == len(stillin):
-                print("Draw between ", ", ".join(str(c) for c in stillin))
+                print("Draw between: ", end="")
+                for guy in stillin:
+                    print(guy, "", end="")
+                print()
+
                 break
 
             to_eliminate = lowest_candidates[0]
