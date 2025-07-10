@@ -10,20 +10,20 @@ WIDTH, HEIGHT = 800, 600
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Trainervrse - Shooting Drill")
 
-# Load assets
+# Load images
+background_img = pygame.image.load("project/background.jpg")
+background_img = pygame.transform.scale(background_img, (WIDTH, HEIGHT))
+
 goal_img = pygame.image.load("project/goal.png")
 goal_img = pygame.transform.scale(goal_img, (WIDTH, 300))
 
 ball_img = pygame.image.load("project/soccer_ball.png")
 ball_img = pygame.transform.scale(ball_img, (50, 50))
 
-# Optional sound
-# pygame.mixer.init()
-# kick_sound = pygame.mixer.Sound("kick.wav")
-
 # Colors
 WHITE = (255, 255, 255)
 BLUE = (0, 0, 255)
+DARK_GREEN = (0, 100, 0)
 
 # Fonts
 font = pygame.font.SysFont(None, 36)
@@ -43,7 +43,6 @@ ball_x = WIDTH // 2 - 25
 ball_y = HEIGHT - 100
 kick_in_progress = False
 kick_target = (0, 0)
-kick_speed = 15
 
 clock = pygame.time.Clock()
 
@@ -90,19 +89,24 @@ def reset_kick():
     ball_y = HEIGHT - 100
     target_x = random.randint(100, WIDTH - 200)
 
+def draw_transparent_target(x, y, w, h, alpha=128):
+    target_surface = pygame.Surface((w, h), pygame.SRCALPHA)
+    target_surface.fill((0, 100, 0, alpha))  # Dark green with transparency
+    screen.blit(target_surface, (x, y))
+
 # Main loop
 running = True
 while running:
-    screen.fill(WHITE)
+    screen.blit(background_img, (0, 0))
     screen.blit(goal_img, (0, 0))
 
     # Draw target area
-    pygame.draw.rect(screen, (255, 0, 0), (target_x, target_y, target_width, target_height))
+    draw_transparent_target(target_x, target_y, target_width, target_height)
 
-    # Draw soccer ball
+    # Draw ball
     screen.blit(ball_img, (ball_x, ball_y))
 
-    # Handle animation
+    # Animate ball
     if kick_in_progress:
         animate_kick()
 
@@ -114,7 +118,7 @@ while running:
             kick_target = pygame.mouse.get_pos()
             kick_in_progress = True
 
-    # Draw stats
+    # Display stats
     show_text(f"Score: {score}/{shots}", 10, 10)
     show_text(f"Difficulty: {difficulty}", 10, 50)
 
