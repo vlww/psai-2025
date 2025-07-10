@@ -4,20 +4,26 @@ def read(filename):
         for line in file:
             if line.strip():
                 row = line.strip().split(',')
-                votes.append([int(x.strip()) for x in row])
+                vote = []
+                for item in row:
+                    equals = [x.strip() for x in item.strip().split('=') if x.strip()]
+                    if equals:
+                        vote.append(equals)
+                votes.append(vote)
     return votes
 
 def firsts(votes, active_candidates):
-    listt = {}
-    for candidate in active_candidates:
-        listt[candidate] = 0
+    tally = {c: 0 for c in active_candidates}
 
     for vote in votes:
-        for preference in vote:
-            if preference in active_candidates:
-                listt[preference] += 1
-                break
-    return listt
+        for group in vote:
+            valid = [c for c in group if c in active_candidates]
+            if valid:
+                weight = 1.0 / len(valid)
+                for c in valid:
+                    tally[c] += weight
+                break  # stop at first active group
+    return tally
 
 def printout(tally, total_votes):
     for candidate in sorted(tally):
@@ -34,18 +40,32 @@ def whowins(tally, total_votes):
 def main(filename):
     try:
         votes = read(filename)
-        total_voters = len(votes)
+
+        # Build list of all candidates
         stillin = []
         for vote in votes:
-            for c in vote:
-                if c not in stillin:
-                    stillin.append(c)
+            for group in vote:
+                for c in group:
+                    if c not in stillin:
+                        stillin.append(c)
         stillin.sort()
 
         round_num = 1
         while True:
-            print(f"round {round_num}")
-            tally = firsts(votes, stillin)
+            # Filter out exhausted ballots (no active candidates left)
+            active_votes = []
+            for vote in votes:
+                found = False
+                for group in vote:
+                    if any(c in stillin for c in group):
+                        found = True
+                        break
+                if found:
+                    active_votes.append(vote)
+
+            total_voters = len(active_votes)
+            print(f"Round {round_num}")
+            tally = firsts(active_votes, stillin)
             printout(tally, total_voters)
 
             winner = whowins(tally, total_voters)
@@ -57,26 +77,20 @@ def main(filename):
             lowest_candidates = [c for c in stillin if tally[c] == min_votes]
 
             if len(lowest_candidates) == len(stillin):
-                print("Draw between: ", end="")
-                for guy in stillin:
-                    print(guy, "", end="")
-                print()
-
+                print("Draw between: ", " ".join(stillin))
                 break
 
             to_eliminate = lowest_candidates[0]
             stillin.remove(to_eliminate)
-            for vote in votes:
-                if to_eliminate in vote:
-                    vote.remove(to_eliminate)
 
             for vote in votes:
-                if to_eliminate in vote:
-                    vote.remove(to_eliminate)
+                for group in vote:
+                    if to_eliminate in group:
+                        group.remove(to_eliminate)
 
             round_num += 1
     except Exception as e:
         print(f"Failed to process file '{filename}': {e}")
 
 if __name__ == '__main__':
-    main('practices/votes.txt')
+    main('practices/votes_cleaned.txt')
