@@ -93,4 +93,4 @@ def main(filename):
         print(f"Failed to process file '{filename}': {e}")
 
 if __name__ == '__main__':
-    main('practices/votes_cleaned.txt')
+    main('practices/votes_projects.txt')
