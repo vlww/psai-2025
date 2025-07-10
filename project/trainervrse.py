@@ -88,7 +88,7 @@ def reset_kick():
     ball_x = WIDTH // 2 - 25
     ball_y = HEIGHT - 100
     target_x = random.randint(100, WIDTH - 200)
-    target_y = random.randint(100, 120)
+    target_y = random.randint(100, 140)
 
 
 def draw_transparent_target(x, y, w, h, alpha=128):
