@@ -6,7 +6,7 @@ import sys
 pygame.init()
 
 # Screen setup
-WIDTH, HEIGHT = 800, 600
+WIDTH, HEIGHT = 800, 450
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Trainervrse - Shooting Drill")
 
@@ -32,7 +32,7 @@ font = pygame.font.SysFont(None, 36)
 target_width = 100
 target_height = 50
 target_x = random.randint(100, WIDTH - 200)
-target_y = 120
+target_y = random.randint(100, 120)
 score = 0
 shots = 0
 difficulty = 1
@@ -83,15 +83,17 @@ def check_goal():
     adjust_difficulty()
 
 def reset_kick():
-    global kick_in_progress, ball_x, ball_y, target_x
+    global kick_in_progress, ball_x, ball_y, target_x, target_y
     kick_in_progress = False
     ball_x = WIDTH // 2 - 25
     ball_y = HEIGHT - 100
     target_x = random.randint(100, WIDTH - 200)
+    target_y = random.randint(100, 120)
+
 
 def draw_transparent_target(x, y, w, h, alpha=128):
     target_surface = pygame.Surface((w, h), pygame.SRCALPHA)
-    target_surface.fill((0, 100, 0, alpha))  # Dark green with transparency
+    target_surface.fill((100, 0, 0, alpha))  # Dark green with transparency
     screen.blit(target_surface, (x, y))
 
 # Main loop
